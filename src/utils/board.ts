@@ -1,11 +1,11 @@
 import { convertOne, convert } from "@/utils/hangeul"
 
-type RandomMap = {[key: string]: number}
-const RANDOM_CONSONANT: RandomMap = {
+type WeightMap = {[key: string]: number}
+const CONSONANT_WEIGHT: WeightMap = {
     "r": 2, "R": 1, "s": 2, "e": 2, "E": 1, "f": 2, "a": 2, "q": 2,
     "Q": 1, "t": 2, "T": 1, "d": 2, "w": 2, "W": 1, "c": 2, "z": 2, "x": 2, "v": 2, "g": 2
 }
-const RANDOM_VOWEL: RandomMap = {
+const VOWEL_WEIGHT: WeightMap = {
     "k": 4, "o": 2, "i": 2, "O": 1, "j": 4, "p": 2, "u": 2, "P": 1,
     "h": 4, "y": 2, "n": 4, "b": 2, "m": 3, "l": 4
 }
@@ -36,6 +36,8 @@ export class Board {
 
     private option: BoardOption
 
+    private mapStorage: {[key: string]: Array<string>} = {}
+
     /**
      * generate n x n size board
      * @param n size of board
@@ -44,30 +46,44 @@ export class Board {
     constructor(n: number, option: BoardOption = defaultBoardOption) {
         this.size = n
         this.option = option
+
+        this.registerWeightMap(CONSONANT_WEIGHT, 'consonant')
+        this.registerWeightMap(VOWEL_WEIGHT, 'vowel')
         
         // init board
         this.board = Array.from({ length: n }, () => Array(n).fill(''))
 
-        let y = 0, x = 0
+        let pos: Position = { row: 0, col: 0 }
         const dx = [1, 0, -1, 0], dy = [0, 1, 0, -1]
         let level = n
         
         while (level > 1) {
             for (let direction = 0; direction < 4; direction++) {
                 for (let i = 0; i < level - 1; i++) {
-                    this.board[y][x] = this.generateOne(y, x)
-                    x += dx[direction]
-                    y += dy[direction]
+                    this.setValue(pos, this.generateOne(pos))
+                    pos.col += dx[direction]
+                    pos.row += dy[direction]
                 }
             }
-            x++
-            y++
+            pos.col++
+            pos.row++
             level -= 2
         }
-        if (level == 1) this.board[y][x] = this.generateOne(y, x)
+        if (level == 1) this.setValue(pos, this.generateOne(pos))
     }
 
-    private generateOne(row: number, col: number): string {
+    private registerWeightMap(map: WeightMap, key: string) {
+        let table: string[] = []
+        for (const [key, weight] of Object.entries(map)) {
+            table.push(...Array(weight).fill(key))   
+        }
+
+        this.mapStorage[key] = table
+    }
+
+    private generateOne(pos: Position): string {
+        const row = pos.row, col = pos.col
+
         // calcuate weights
         let consonantWeight = 3
         let vowelWeight = 3
@@ -82,34 +98,37 @@ export class Board {
                 if (!inRange(y, x)) continue 
                 const ch = this.board[y][x]
                 if (ch !== '') {
-                    if (Object.keys(RANDOM_CONSONANT).includes(ch)) {
+                    if (Object.keys(CONSONANT_WEIGHT).includes(ch)) {
                         if (ch === ch.toUpperCase()) vowelWeight += 3
                         else {
                             vowelWeight += 2
                             consonantWeight += 1
                         }
                     }
-                    else if (Object.keys(RANDOM_VOWEL).includes(ch)) consonantWeight += 3
+                    else if (Object.keys(VOWEL_WEIGHT).includes(ch)) consonantWeight += 3
                 }
             }
         }
 
         // select random character
-        if (this.randomSelect({consonant: consonantWeight * this.option.consonantRatio, vowel: vowelWeight * this.option.vowelRatio}) === "consonant") {
-            return this.randomSelect(RANDOM_CONSONANT)
+        this.registerWeightMap({consonant: consonantWeight * this.option.consonantRatio, vowel: vowelWeight * this.option.vowelRatio}, "temp")
+        if (this.randomSelect("temp") === "consonant") {
+            return this.randomSelect("consonant")
         } else {
-            return this.randomSelect(RANDOM_VOWEL)
+            return this.randomSelect("vowel")
         }
     }
 
-    private randomSelect(map: RandomMap): string {
-        let table: string[] = []
-        for (const [key, weight] of Object.entries(map)) {
-            table.push(...Array(weight).fill(key))   
-        }
+    private randomSelect(mapKey: string): string {
+        const map = this.mapStorage[mapKey]
+        if (!map) return ''
         
-        const randomIdx = Math.floor(Math.random() * table.length)
-        return table[randomIdx]
+        const randomIdx = Math.floor(Math.random() * map.length)
+        return map[randomIdx]
+    }
+
+    private setValue(pos: Position, value: string | null) {
+        this.board[pos.row][pos.col] = value ?? ''
     }
 
     getSize(): number {
@@ -159,7 +178,11 @@ export class Board {
             this.score += this.calcScore(characters.length)
 
             characters.forEach((pos: Position) => {
-                this.board[pos.row][pos.col] = this.generateOne(pos.row, pos.col)
+                this.setValue(pos, null)
+            })
+
+            characters.forEach((pos: Position) => {
+                this.setValue(pos, this.generateOne(pos))
             })
 
             return true
