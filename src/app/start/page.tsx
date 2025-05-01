@@ -202,6 +202,7 @@ export default function StartPage() {
                                     whileHover={{ scale: 1.1 }}
                                     whileTap={{ scale: 0.97 }}
                                     className="text-lg py-2 px-5 rounded-lg cursor-pointer bg-blue-500 w-[300px] mt-1">로그인</motion.button>
+                                <div className="font-extralight text-gray-400 hover:underline hover:decoration-gray-400 cursor-pointer mt-2 ml-1">회원가입하기</div>
                             </div>
                             <div className="font-light text-2xl mx-12">
                             또는
