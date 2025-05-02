@@ -10,6 +10,9 @@ const MIDDLE_LIST: Array<string> = [ "k", "o", "i", "O", "j", "p", "u", "P",
 const FINAL_LIST: Array<string> = [ " ", "r", "R", "rt", "s", "sw", "sg", "e",
     "f", "fr", "fa", "fq", "ft", "fx", "fv", "fg", "a",
     "q", "qt", "t", "T", "d", "w", "c", "z", "x", "v", "g" ]
+const CONSONANT_LIST: Array<string> = [ " ", "r", "R", "rt", "s", "sw", "sg", "e", "E",
+    "f", "fr", "fa", "fq", "ft", "fx", "fv", "fg", "a",
+    "q", "Q", "qt", "t", "T", "d", "w", "W", "c", "z", "x", "v", "g" ]
 
 type CharType = 'First' | 'Middle' | 'Final' | 'Separate' | 'Other'
 
@@ -256,7 +259,7 @@ function combine(str: string, typeList: CharType[]): string {
 export function convertOne(str: string): string {
     switch (isConsonantOrVowel(str)) {
         case 1: {
-            const idx = FINAL_LIST.findIndex((v) => v === str)
+            const idx = CONSONANT_LIST.findIndex((v) => v === str)
             return String.fromCodePoint(UNICODE_CONSONANT_BEGIN + idx)
         }
         case 2: {
