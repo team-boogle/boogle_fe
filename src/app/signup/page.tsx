@@ -71,7 +71,7 @@ const SignupPage = () => {
 							onChange: setNickname,
 						},
 					].map((field, idx) => (
-						<div key={idx} className="flex items-center gap-6">
+						<div key={idx} className="flex items-center gap-6" style={{ fontFamily: "NanumSquare" }}>
 							<label className="w-28 text-right text-[#A5A5A5] text-base">
 								{field.label}
 							</label>
@@ -90,6 +90,7 @@ const SignupPage = () => {
 						<button
 							type="submit"
 							className="w-100 h-15 bg-[#CBCBCB] border border-[#A5A5A5] rounded text-base text-white hover:cursor-pointer"
+							style={{ fontFamily: "NanumSquareBold" }}
 						>
 							회원가입
 						</button>
