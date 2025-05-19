@@ -17,11 +17,11 @@ const MyPage = () => {
 				</h1>
 			</div>
 			<div
-				className="flex flex-col items-center mt-25"
+				className="mt-25"
 				style={{ fontFamily: "NanumSquare" }}
 			>
-				<form className="space-y-6 items-center">
-					<div className="flex items-center gap-6">
+				<form>
+					<div className="flex items-center gap-6 mb-8">
 						<label className="w-28 text-right text-[#A5A5A5] text-base">
 							새 비밀번호
 						</label>
@@ -33,7 +33,7 @@ const MyPage = () => {
 						/>
 						<div className="w-28" />
 					</div>
-					<div className="flex items-center gap-6">
+					<div className="flex items-center gap-6 mb-12">
 						<label className="w-28 text-right text-[#A5A5A5] text-base">
 							비밀번호 확인
 						</label>
@@ -45,7 +45,7 @@ const MyPage = () => {
 						/>
 						<div className="w-28" />
 					</div>
-					<div className="flex justify-center gap-8">
+					<div className="flex justify-center gap-11">
 						<button className="w-35 h-15 border border-[#A5A5A5] text-center rounded box-border">
 							취소
 						</button>
