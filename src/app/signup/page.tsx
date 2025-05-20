@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import Header from "../components/Header";
+
 const SignupPage = () => {
 	const [userid, setUserid] = useState("");
 	const [password, setPassword] = useState("");
@@ -35,14 +37,7 @@ const SignupPage = () => {
 
 	return (
 		<div className="min-h-screen flex flex-col items-center">
-			<div className="h-35 flex items-center justify-center">
-				<h1
-					className="text-4xl"
-					style={{ fontFamily: "Paperlogy-8ExtraBold" }}
-				>
-					부글
-				</h1>
-			</div>
+			<Header />
 			<div className="flex items-start justify-center mt-15">
 				<form onSubmit={handleSubmit} className="space-y-6">
 					{[
@@ -89,7 +84,7 @@ const SignupPage = () => {
 						<div className="w-28" />
 						<button
 							type="submit"
-							className="w-100 h-15 bg-[#CBCBCB] border border-[#A5A5A5] rounded text-base text-white hover:cursor-pointer"
+							className="w-100 h-15 bg-[#CBCBCB] border border-[#A5A5A5] rounded text-base text-white cursor-pointer"
 							style={{ fontFamily: "NanumSquareBold" }}
 						>
 							회원가입

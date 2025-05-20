@@ -1,11 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { MdOutlineTagFaces, MdOutlineFace4 } from "react-icons/md";
 import { BiFace } from "react-icons/bi";
 import { TbSunglasses } from "react-icons/tb";
 import { LuCat, LuDog } from "react-icons/lu";
+
+import Header from "../../components/Header";
 
 const backgroundColors = [
 	"#ECECEC",
@@ -42,23 +45,20 @@ const characterIcons = [
 ];
 
 export default function EditProfilePage() {
+	const router = useRouter();
+
 	const [nickname, setNickname] = useState("별명");
   const [selectedColor, setSelectedColor] = useState("#ECECEC");
 	const [selectedIcon, setSelectedIcon] = useState("MdOutlineTagFaces");
 
 	return (
 		<div className="min-h-screen flex flex-col items-center">
-			{/* 헤더 */}
-			<div className="h-35 flex items-center justify-center">
-				<h1
-					className="text-4xl"
-					style={{ fontFamily: "Paperlogy-8ExtraBold" }}
-				>
-					부글
-				</h1>
-			</div>
+			<Header />
 
-			<div className="flex flex-col items-center" style={{ fontFamily: "NanumSquare" }}>
+			<div
+				className="flex flex-col items-center"
+				style={{ fontFamily: "NanumSquare" }}
+			>
 				{/* 프로필 미리보기 */}
 				<div
 					className="w-18 h-18 rounded-full flex items-center justify-center mt-8 mb-12"
@@ -77,7 +77,7 @@ export default function EditProfilePage() {
 							{backgroundColors.map((color) => (
 								<button
 									key={color}
-                  type="button"
+									type="button"
 									className={`w-14 h-14 rounded-full border-2 ${
 										selectedColor === color
 											? "border-[#A5A5A5]"
@@ -100,7 +100,7 @@ export default function EditProfilePage() {
 							{characterIcons.map((char) => (
 								<button
 									key={char.id}
-                  type="button"
+									type="button"
 									className={`w-14 h-14 rounded-full border-2 flex items-center justify-center ${
 										selectedIcon === char.id
 											? "border-[#A5A5A5]"
@@ -129,11 +129,20 @@ export default function EditProfilePage() {
 					</div>
 
 					{/* 버튼 */}
-					<div className="flex justify-center gap-8">
-						<button className="w-35 h-15 border border-[#A5A5A5] text-center rounded box-border">
+					<div
+						className="flex justify-center gap-8"
+						style={{ fontFamily: "NanumSquareBold" }}
+					>
+						<button 
+							type="button" 
+							className="w-35 h-15 border border-[#A5A5A5] text-center rounded box-border cursor-pointer" 
+							onClick={() => router.push("/mypage")}
+						>
 							취소
 						</button>
-						<button className="w-35 h-15 bg-[#CBCBCB] border border-[#A5A5A5] text-center text-white rounded box-border">
+						<button 
+							className="w-35 h-15 bg-[#CBCBCB] border border-[#A5A5A5] text-center text-white rounded box-border cursor-pointer"
+						>
 							저장하기
 						</button>
 					</div>

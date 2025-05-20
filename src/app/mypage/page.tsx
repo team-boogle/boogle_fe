@@ -1,15 +1,21 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+
+import Header from "../components/Header";
+
 const MyPage = () => {
-  const user = {
+	const router = useRouter();
+
+	const user = {
 		id: "userid01",
 		nickname: "닉네임",
 		bestScore: 0,
-  };
+	};
 
-  return (
+	return (
 		<div className="min-h-screen flex flex-col items-center">
-			<div className="h-35 flex items-center justify-center">
-				<h1 className="text-4xl" style={{ fontFamily: "Paperlogy-8ExtraBold" }}>부글</h1>
-			</div>
+			<Header />
 			<div className="flex flex-col items-center mt-15">
 				<div className="w-25 h-25 rounded-full bg-[#ECECEC]" />
 				<div className="space-y-11 my-12">
@@ -33,16 +39,36 @@ const MyPage = () => {
 					</div>
 				</div>
 
-				<div className="text-[#A5A5A5] space-x-4 mt-5">
-					<button className="hover:underline">프로필 수정</button>
+				<div
+					className="text-[#A5A5A5] space-x-4 mt-5"
+					style={{ fontFamily: "NanumSquareBold" }}
+				>
+					<button
+						className="hover:underline cursor-pointer"
+						onClick={() => router.push("/mypage/edit-profile")}
+					>
+						프로필 수정
+					</button>
 					<span>|</span>
-					<button className="hover:underline">비밀번호 변경</button>
+					<button
+						className="hover:underline cursor-pointer"
+						onClick={() => router.push("/mypage/change-password")}
+						style={{ cursor: "pointer" }}
+					>
+						비밀번호 변경
+					</button>
 					<span>|</span>
-					<button className="hover:underline">로그아웃</button>
+					<button
+						className="hover:underline cursor-pointer"
+						onClick={() => router.push("/mypage/edit-profile")}
+						style={{ cursor: "pointer" }}
+					>
+						로그아웃
+					</button>
 				</div>
 			</div>
 		</div>
-  );
+	);
 };
 
 export default MyPage;

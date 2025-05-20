@@ -1,25 +1,20 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+import Header from "../../components/Header";
 
 const MyPage = () => {
+	const router = useRouter();
+
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
 	return (
 		<div className="min-h-screen flex flex-col items-center">
-			<div className="h-35 flex items-center justify-center">
-				<h1
-					className="text-4xl"
-					style={{ fontFamily: "Paperlogy-8ExtraBold" }}
-				>
-					부글
-				</h1>
-			</div>
-			<div
-				className="mt-25"
-				style={{ fontFamily: "NanumSquare" }}
-			>
+			<Header />
+			<div className="mt-25" style={{ fontFamily: "NanumSquare" }}>
 				<form>
 					<div className="flex items-center gap-6 mb-8">
 						<label className="w-28 text-right text-[#A5A5A5] text-base">
@@ -45,11 +40,20 @@ const MyPage = () => {
 						/>
 						<div className="w-28" />
 					</div>
-					<div className="flex justify-center gap-11">
-						<button className="w-35 h-15 border border-[#A5A5A5] text-center rounded box-border">
+					<div
+						className="flex justify-center gap-11"
+						style={{ fontFamily: "NanumSquareBold" }}
+					>
+						<button
+							type="button" 
+							className="w-35 h-15 border border-[#A5A5A5] text-center rounded box-border cursor-pointer" 
+							onClick={() => router.push("/mypage")}
+						>
 							취소
 						</button>
-						<button className="w-35 h-15 bg-[#CBCBCB] border border-[#A5A5A5] text-center text-white rounded box-border">
+						<button 
+							className="w-35 h-15 bg-[#CBCBCB] border border-[#A5A5A5] text-center text-white rounded box-border cursor-pointer"
+						>
 							저장하기
 						</button>
 					</div>
