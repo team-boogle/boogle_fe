@@ -14,15 +14,15 @@ export default function Header({
   avatarUrl,
 }: HeaderProps) {
   return (
-    <header className="grid grid-cols-3 items-center px-8 py-8 bg-white flex-[1_1_0%]">
+    <header className="flex items-center px-8 py-8 bg-white flex-[1_1_0%]">
       {/* 1) 빈 칸 */}
-      <div />
+      <div className='flex-[1.5_1_15%]'/>
 
       {/* 2) 중앙 제목 */}
-      <h1 className="col-span-1 text-center text-4xl font-bold">{title}</h1>
+      <h1 className="flex-[7_1_70%] col-span-1 text-center text-4xl font-extrabold">{title}</h1>
 
       {/* 3) 오른쪽 사용자 정보 */}
-      <div className="flex items-center justify-end space-x-3">
+      <div className="flex flex-[1.5_1_15%] items-center space-x-3">
         {avatarUrl ? (
           <Image
             src={avatarUrl}

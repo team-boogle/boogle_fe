@@ -35,7 +35,7 @@ export default function Timer({
           style={{ height: `${percent}%` }}
         />
       </div>
-      <div className="p-2 flex-[1_1_0%] text-2xl font-medium">{secondsLeft}</div>
+      <div className="flex-[1_1_0%] text-2xl font-medium flex items-end">{secondsLeft}</div>
     </div>
   )
 }

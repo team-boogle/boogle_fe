@@ -8,7 +8,7 @@ import MainGame from './sections/MainGame'
 export default function GamePage(): React.JSX.Element {
   return (
     <main className="flex flex-col h-screen">
-      <Header title="BOGGLE" userName="user1" />
+      <Header title="부글" userName="user1" />
       <MainGame />
       
     </main>

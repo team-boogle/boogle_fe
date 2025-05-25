@@ -10,7 +10,7 @@ interface ScoreProps {
 export default function Score({ score }: ScoreProps): React.JSX.Element {
   return (
     <footer className="w-full pb-4 bg-white">
-      <div className="text-3xl font-bold text-center">
+      <div className="text-3xl font-light text-center">
         {score}
       </div>
     </footer>

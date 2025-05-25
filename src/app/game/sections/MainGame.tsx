@@ -1,4 +1,3 @@
-// app/game/page.tsx
 'use client'
 
 import React, { useState, useCallback, useRef } from 'react'
@@ -9,6 +8,7 @@ import BoardView from '../components/BoardView'
 import Ranking from '../components/Ranking'
 import Score from '../components/Score'
 import TimeUpModal from '../components/TimeUpModal'
+import { convertOne, convert } from "@/utils/hangeul"
 
 export default function MainGame(): React.JSX.Element {
   // Board 인스턴스 참조
@@ -42,22 +42,24 @@ export default function MainGame(): React.JSX.Element {
   }, [])
 
   // 선택 완료 핸들러
-  const handleSelectionEnd = useCallback((
+  const handleSelectionEnd = useCallback(async (
     path: { row: number; col: number; letter: string }[]
   ) => {
     const positions = path.map(({ row, col }) => ({ row, col }))
     
     // Board 클래스의 검증 및 점수 계산
-    const isValid = boardRef.current.makeWord(positions)
+    console.log(positions)
+    const isValid = await boardRef.current.makeWord(positions)
     
-    if (isValid) {
+    if (isValid != false) {
       setTiles([...boardRef.current.getAll()])
       setScore(boardRef.current.getScore())
       
       // 찾은 단어 기록
-      const word = path.map(t => t.letter).join('')
+      // const word = path.map(t => t.letter).join('')
+      const word = isValid
       const delta = boardRef.current.getScore() - score
-      setFoundWords(prev => [...prev, { word, score: delta }])
+      setFoundWords(prev => [...prev, { word: word as string, score: delta }])
       
       // 무효 타일 제거
       setInvalidTiles(prev => {
@@ -77,17 +79,17 @@ export default function MainGame(): React.JSX.Element {
     <div className='w-full flex-[10_1_0%] flex flex-col'>
       <section className="flex flex-1">
         {/* 컨트롤 패널 */}
-        <aside className="flex flex-[3.5_1_0%] h-full pl-4 space-y-4">
+        <aside className="flex flex-[3.5_1_35%] h-full pl-20 space-y-4">
           <div className='flex-[8_1_0%] h-full'>
             <div className="pt-4">
-              <h3 className="font-medium mb-2">찾은 단어</h3>
-              <ul className="space-y-1 max-h-48 overflow-y-auto">
+              <h3 className="font-medium mb-2 text-2xl">찾은 단어</h3>
+              <ul className="space-y-1 max-h-48 overflow-y-hidden w-full">
                 {foundWords.slice().reverse().map(({ word, score }, idx) => (
                   <li
                     key={foundWords.length - idx}
-                    className="flex justify-between items-center px-2 py-1 bg-green-50 rounded text-sm"
+                    className="flex justify-between items-center px-2 py-1 bg-blue-100 rounded text-sm"
                   >
-                    <span className="truncate">{word}</span>
+                    <span className="break-words">{word}</span>
                     <span className="ml-2 font-semibold">+{score}</span>
                   </li>
                 ))}
@@ -107,7 +109,7 @@ export default function MainGame(): React.JSX.Element {
         </aside>
 
         {/* 게임 보드 */}
-        <section className="flex-[3_1_0%] flex items-center justify-center">
+        <section className="flex-[3_1_30%] flex items-center justify-center">
           <BoardView
             tiles={tiles}
             invalidTiles={invalidTiles}
@@ -116,7 +118,7 @@ export default function MainGame(): React.JSX.Element {
         </section>
 
         {/* 랭킹 */}
-        <aside className="flex-[3.5_1_0%] pl-8 overflow-y-auto">
+        <aside className="flex-[3.5_1_35%] pl-8 overflow-y-auto">
           <Ranking />
         </aside>
       </section>
