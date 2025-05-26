@@ -9,6 +9,7 @@ const VOWEL_WEIGHT: WeightMap = {
     "k": 4, "o": 2, "i": 2, "O": 1, "j": 4, "p": 2, "u": 2, "P": 1,
     "h": 4, "y": 2, "n": 4, "b": 2, "m": 3, "l": 4
 }
+
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 async function testValid(word: String) {
@@ -179,6 +180,7 @@ export class Board {
      * @param characters List of the positions of the selected characters.
      * @returns `true` if the combined word is valid, else `false`
      */
+
     async makeWord(characters: Array<Position>): Promise<boolean|string> {
         let buffer: string = ''
         characters.forEach((pos) => buffer += this.board[pos.row][pos.col])
@@ -198,6 +200,7 @@ export class Board {
             })
 
             return word
+
         } else return false
     }
 }
