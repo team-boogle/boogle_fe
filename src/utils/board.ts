@@ -10,6 +10,20 @@ const VOWEL_WEIGHT: WeightMap = {
     "h": 4, "y": 2, "n": 4, "b": 2, "m": 3, "l": 4
 }
 
+const baseURL = process.env.NEXT_PUBLIC_API_URL;
+
+async function testValid(word: String) {
+  console.log(word, "testValid");
+  const res = await fetch(`${baseURL}/check-word`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({word: word})});
+  if (!res.ok) throw new Error("Failed to fetch user data");
+  return res.json();
+}
+
 export interface Position {
     row: number,
     col: number
@@ -166,13 +180,13 @@ export class Board {
      * @param characters List of the positions of the selected characters.
      * @returns `true` if the combined word is valid, else `false`
      */
-    makeWord(characters: Array<Position>): boolean {
+
+    async makeWord(characters: Array<Position>): Promise<boolean|string> {
         let buffer: string = ''
         characters.forEach((pos) => buffer += this.board[pos.row][pos.col])
         const word = convert(buffer)
-
         // TODO: check validity
-        let isValid = true
+        const { isValid } = await testValid(word)
 
         if (isValid) {
             this.score += this.calcScore(characters.length)
@@ -185,7 +199,8 @@ export class Board {
                 this.setValue(pos, this.generateOne(pos))
             })
 
-            return true
+            return word
+
         } else return false
     }
 }
