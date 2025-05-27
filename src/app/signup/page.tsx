@@ -4,8 +4,10 @@ import { useState } from "react";
 
 import Header from "../components/Header";
 
+const baseURL = process.env.NEXT_PUBLIC_API_URL;
+
 const SignupPage = () => {
-	const [userid, setUserid] = useState("");
+	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const [nickname, setNickname] = useState("");
@@ -18,21 +20,22 @@ const SignupPage = () => {
 			return;
 		}
 
-		try {
-			const res = await fetch("http://localhost:3001/api/signup", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ id: userid, password }),
-			});
+		const res = await fetch(`${baseURL}/api/sign_up`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ email: email, password: password, nickName: nickname }),
+		});
 
-			const data = await res.json();
-			alert(data.message);
-		} catch (err) {
-			alert("회원가입 중 오류가 발생했습니다.");
-			console.error(err);
+		if (!res.ok) {
+			console.error(res);
+			return;
 		}
+
+		const data = await res.json();
+		alert(data.message);
+
 	};
 
 	return (
@@ -42,10 +45,10 @@ const SignupPage = () => {
 				<form onSubmit={handleSubmit} className="space-y-6">
 					{[
 						{
-							label: "아이디",
-							type: "text",
-							value: userid,
-							onChange: setUserid,
+							label: "이메일",
+							type: "email",
+							value: email,
+							onChange: setEmail,
 						},
 						{
 							label: "비밀번호",
