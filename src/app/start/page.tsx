@@ -185,26 +185,26 @@ export default function StartPage() {
                     </div>
                 </div>
             </div>
-            <motion.div ref={scope} className="w-screen h-[calc(100vh + 2px)] bg-black/95 relative border-t-2">
+            <motion.div ref={scope} className="w-screen h-[calc(100vh + 2px)] bg-white/95 dark:bg-black/95 relative border-t-2">
                 <div className="absolute top-0 right-0 cursor-pointer py-4 px-4 text-xl font-light"
-                onClick={handleCloseClick}><Image src={"/close.png"} alt="close" height={18} width={18}></Image></div>
+                onClick={handleCloseClick}><Image src={"/close.png"} alt="close" height={18} width={18} className="dark:invert"></Image></div>
                 <div className="flex h-screen w-screen justify-center items-center">
                     <div className="flex flex-row ">
                         <div className="flex justify-center items-center">
                             <div>
                                 <motion.input type="text" placeholder="아이디"
-                                    className="py-2 px-4 bg-transparent border-1 border-white/50 focus:border-white w-[300px] block rounded-lg mb-3"
+                                    className="py-2 px-4 bg-transparent border-1 border-black/50 placeholder-black/50 dark:border-white/50 dark:placeholder-white/50 focus:border-white w-[300px] block rounded-lg mb-3"
                                     whileFocus={{ scale: 1.1 }}></motion.input>
                                 <motion.input type="password" placeholder="비밀번호"
-                                    className="py-2 px-4 bg-transparent border-1 border-white/50 focus:border-white w-[300px] block rounded-lg mb-3"
+                                    className="py-2 px-4 bg-transparent border-1 border-black/50 placeholder-black/50 dark:placeholder-white/50 dark:border-white/50 focus:border-white w-[300px] block rounded-lg mb-3"
                                     whileFocus={{ scale: 1.1 }}></motion.input>
                                 <motion.button
                                     whileHover={{ scale: 1.1 }}
                                     whileTap={{ scale: 0.97 }}
-                                    className="text-lg py-2 px-5 rounded-lg cursor-pointer bg-blue-500 w-[300px] mt-1">로그인</motion.button>
+                                    className="text-lg py-2 px-5 rounded-lg cursor-pointer bg-blue-500 w-[300px] mt-1 text-white">로그인</motion.button>
                                 <div className="font-extralight text-gray-400 hover:underline hover:decoration-gray-400 cursor-pointer mt-2 ml-1">회원가입하기</div>
                             </div>
-                            <div className="font-light text-2xl mx-12">
+                            <div className="font-light text-2xl mx-12 dark:text-white">
                             또는
                             </div>
                             <div className="flex justify-center items-center">
