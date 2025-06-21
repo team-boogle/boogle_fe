@@ -1,0 +1,36 @@
+import React from "react";
+import { motion, AnimatePresence } from "framer-motion";
+
+interface Phoneme {
+  row: number;
+  col: number;
+  letter: string;
+}
+
+interface CurrentPhonemesProps {
+  path: Phoneme[];
+}
+
+const CurrentPhonemes: React.FC<CurrentPhonemesProps> = ({ path }) => {
+  console.log("currentphe")
+  return (
+    <div className="flex flex-wrap space-x-1 mt-2 min-h-[32px]">
+      <AnimatePresence>
+        {path.map((t, idx) => (
+          <motion.span
+            key={idx + t.letter}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.2 }}
+            className="inline-block rounded text-2xl font-bold"
+          >
+            {t.letter}
+          </motion.span>
+        ))}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+export default CurrentPhonemes;
