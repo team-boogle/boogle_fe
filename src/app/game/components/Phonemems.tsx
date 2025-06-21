@@ -15,7 +15,6 @@ interface CurrentPhonemesProps {
 
 const CurrentPhonemes: React.FC<CurrentPhonemesProps> = ({ path }) => {
   return (
-    // === [수정] 아래 클래스를 모두 변경합니다. ===
     <div className="relative w-full h-full flex items-center justify-center overflow-hidden whitespace-nowrap">
       <AnimatePresence>
         {path.map((t, idx) => (
