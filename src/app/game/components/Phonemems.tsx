@@ -1,3 +1,5 @@
+// app/game/components/CurrentPhonemes.tsx
+
 import React from "react";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -12,9 +14,9 @@ interface CurrentPhonemesProps {
 }
 
 const CurrentPhonemes: React.FC<CurrentPhonemesProps> = ({ path }) => {
-  console.log("currentphe")
   return (
-    <div className="flex flex-wrap space-x-1 mt-2 min-h-[32px]">
+    // === [수정] 아래 클래스를 모두 변경합니다. ===
+    <div className="relative w-full h-full flex items-center justify-center overflow-hidden whitespace-nowrap">
       <AnimatePresence>
         {path.map((t, idx) => (
           <motion.span

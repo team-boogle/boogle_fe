@@ -27,7 +27,6 @@ export default function Timer({
   const percent = Math.max(0, ((duration - secondsLeft) / duration) * 100)
 
   return (
-    // [수정] flex를 grid로 변경하고 8:1 비율로 행을 나눔
     <div className="grid grid-rows-[8fr_1fr] h-full w-full">
       {/* 타이머 바 (8 부분) */}
       <div className="w-8 bg-red-400 rounded-xl overflow-hidden justify-self-center">

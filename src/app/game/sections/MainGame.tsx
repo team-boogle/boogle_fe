@@ -14,9 +14,6 @@ import CurrentPhonemes from '../components/Phonemems'
 export default function MainGame(): React.JSX.Element {
   // Board 인스턴스 참조
   const boardRef = useRef<Board>(new Board(10, defaultBoardOption))
-  
-  // [수정] 불필요해진 모든 Ref와 높이 동기화 로직을 제거했습니다.
-
   // 상태 관리
   const [tiles, setTiles] = useState(boardRef.current.getAll())
   const [score, setScore] = useState(boardRef.current.getScore())
@@ -72,21 +69,16 @@ export default function MainGame(): React.JSX.Element {
 
   return (
     <div className='w-full h-screen grid grid-rows-[1fr_auto]'>
-      {/* 
-        [수정] `items-start`를 제거하여 Grid의 기본 'stretch' 동작으로 모든 열의 높이가 같아지도록 합니다.
-      */}
       <section className="grid grid-cols-[3.5fr_3fr_3.5fr]">
         
         <aside className="grid grid-cols-10 pl-20 space-x-4 h-full">
           <div className='col-span-8 grid grid-rows-[auto_1fr] pt-4 min-h-0 h-full'>
             <h3 className="font-medium mb-2 text-2xl flex-shrink-0">찾은 단어</h3>
             
-            {/* [수정] ul을 Flexbox 컨테이너로 변경 */}
             <ul className="flex-1 flex flex-col">
               {foundWords.slice(-12).map(({ word, score }, idx) => (
                 <li 
                   key={idx} 
-                  // [수정] 마지막 아이템의 아래쪽 마진을 'auto'로 설정하여 위로 밀어 올립니다.
                   className="flex justify-between items-center rounded text-sm mb-2 last:mb-auto"
                 >
                   <span className="truncate text-lg font-medium">{word}</span>
@@ -113,7 +105,7 @@ export default function MainGame(): React.JSX.Element {
               onPathChange={setCurrentPath}
             />
           </div>
-          <div className="grid place-items-center">
+          <div className="flex justify-center items-center min-w-0 min-h-0">
             <CurrentPhonemes path={currentPath} />
           </div>
         </section>

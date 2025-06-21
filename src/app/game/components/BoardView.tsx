@@ -86,10 +86,8 @@ export default function BoardView({
 };
 
   return (
-    // [수정 1] 최상위 div를 grid 컨테이너로 만들어 자식(보드)을 중앙에 배치합니다.
     <div className="relative w-full h-full grid place-items-center">
       
-      {/* [수정 2] 실제 보드 div에 ref를 이동시키고, 정사각형 비율을 강제합니다. */}
       <div
         ref={boardRef}
         className="grid gap-2 rounded-lg w-full max-w-full aspect-square"
@@ -119,10 +117,7 @@ export default function BoardView({
         )}
       </div>
       
-      {/* 
-        연결선 SVG는 최상위 div를 기준으로 절대 위치를 가지므로 수정할 필요가 없습니다.
-        getLinePoints 함수가 올바른 ref를 기준으로 좌표를 계산하므로 라인이 정확히 그려집니다.
-      */}
+
       <svg 
         className="absolute top-0 left-0 w-full h-full pointer-events-none"
         style={{ zIndex: 1 }}
