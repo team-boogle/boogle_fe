@@ -5,37 +5,49 @@ import React, { forwardRef } from 'react'
 
 interface TileProps {
   letter: string
-  selected: boolean
+  selectCount: number
   invalid: boolean
   onTileMouseDown: () => void
   onTileMouseEnter: () => void
 }
 
 const Tile = forwardRef<HTMLButtonElement, TileProps>(
-  ({ letter, selected, invalid, onTileMouseDown, onTileMouseEnter }, ref) => {
+  ({ letter, selectCount, invalid, onTileMouseDown, onTileMouseEnter }, ref) => {
     const pointerClass = invalid ? 'pointer-events-none' : ''
+
+    const blueBgClasses = [
+      'bg-white',        // 0회 선택
+      'bg-blue-100',     // 1회
+      'bg-blue-200',     // 2회
+      'bg-blue-300',     // 3회
+      'bg-blue-400',     // 4회
+      'bg-blue-500',     // 5회 이상
+    ]
+    const bgClass = blueBgClasses[Math.min(selectCount, blueBgClasses.length - 1)]
+
+
+    const outlineClass = selectCount > 0 ? 'outline-2 outline-blue-400' : 'outline-1 outline-gray-300'
+
     return (
       <button
-        ref={ref} // ref를 버튼에 연결
+        ref={ref}
         type="button"
         onMouseDown={onTileMouseDown}
         onMouseEnter={onTileMouseEnter}
         disabled={invalid}
         className={`
-          w-full aspect-square outline outline-1 outline-gray-300
-          rounded flex items-center justify-center font-bold text-lg
+          w-full aspect-square rounded flex items-center justify-center font-bold text-lg
           transition-all duration-300 select-none
-          ${selected ? 'bg-blue-100 outline-2 outline-blue-400' : 'bg-white'}
+          ${outlineClass}
           ${pointerClass}
+          ${bgClass}
         `}
-        onDragStart={(e) => e.preventDefault()}
+        // style={{ backgroundColor: bgColor }}
+        onDragStart={e => e.preventDefault()}
       >
         {letter}
       </button>
     )
   }
 )
-
-Tile.displayName = 'Tile' // 디버깅용 이름 지정
-
-export default Tile
+export default Tile;

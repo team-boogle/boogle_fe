@@ -1,4 +1,3 @@
-// app/game/components/Board.tsx
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
@@ -14,12 +13,14 @@ interface BoardViewProps {
   tiles: string[][]
   invalidTiles: Set<string>
   onSelectionEnd: (path: PositionWithLetter[]) => void
+  onPathChange?: (path: PositionWithLetter[]) => void
 }
 
 export default function BoardView({
   tiles,
   invalidTiles,
   onSelectionEnd,
+  onPathChange
 }: BoardViewProps): React.JSX.Element {
   const [dragging, setDragging] = useState(false)
   const [path, setPath] = useState<PositionWithLetter[]>([])
@@ -49,6 +50,10 @@ export default function BoardView({
     return () => window.removeEventListener('mouseup', handleMouseUp)
   }, [dragging, path, onSelectionEnd])
 
+  useEffect(() => {
+  onPathChange?.(path)
+  }, [path, onPathChange])
+
   // 타일 선택 로직
   const selectTile = (row: number, col: number) => {
     const key = `${row},${col}`
@@ -60,12 +65,11 @@ export default function BoardView({
       const dc = Math.abs(col - last.col)
       if (dr > 1 || dc > 1) return
     }
-
-    if (!path.some(t => t.row === row && t.col === col)) {
-      setPath(prev => [...prev, { row, col, letter: tiles[row][col] }])
-    }
+    setPath(prev => [...prev, { row, col, letter: tiles[row][col] }])
   }
-
+  // 중복 카운트
+  const getTileSelectCount = (row: number, col: number) => path.filter(t => t.row === row && t.col === col).length;
+  
   // SVG 연결선 좌표 계산
   const getLinePoints = () => {
   if (!boardRef.current || path.length < 2) return '';
@@ -82,11 +86,14 @@ export default function BoardView({
 };
 
   return (
-    <div ref={boardRef} className="relative w-full h-full">
+    <div className="relative w-full h-full grid place-items-center">
+      
       <div
-        className="grid gap-2 rounded-lg"
+        ref={boardRef}
+        className="grid gap-2 rounded-lg w-full max-w-full aspect-square"
         style={{
           gridTemplateColumns: `repeat(${tiles.length}, 1fr)`,
+          gridTemplateRows: `repeat(${tiles.length}, 1fr)`,
           position: 'relative',
           zIndex: 2,
         }}
@@ -101,7 +108,7 @@ export default function BoardView({
                 tileRefs.current[i][j] = el; // null 허용
               }}
               letter={cell}
-              selected={path.some(t => t.row === i && t.col === j)}
+              selectCount={getTileSelectCount(i, j)}
               invalid={invalidTiles.has(`${i},${j}`)}
               onTileMouseDown={() => selectTile(i, j)}
               onTileMouseEnter={() => dragging && selectTile(i, j)}
@@ -110,7 +117,7 @@ export default function BoardView({
         )}
       </div>
       
-      {/* 연결선 SVG */}
+
       <svg 
         className="absolute top-0 left-0 w-full h-full pointer-events-none"
         style={{ zIndex: 1 }}

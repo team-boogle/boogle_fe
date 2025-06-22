@@ -14,7 +14,7 @@ export default function Header({
   avatarUrl,
 }: HeaderProps) {
   return (
-    <header className="flex items-center px-8 py-8 bg-white flex-[1_1_0%]">
+    <header className="flex items-center px-8 py-8 bg-white flex-[0_0_10%]">
       {/* 1) 빈 칸 */}
       <div className='flex-[1.5_1_15%]'/>
 

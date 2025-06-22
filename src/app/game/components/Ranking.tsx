@@ -16,7 +16,7 @@ export default function Ranking(): React.JSX.Element {
   return (
     <div className="h-full flex flex-col">
       {/* 섹션 제목 */}
-      <h2 className="mb-2 text-2xl font-medium">순위</h2>
+      <h2 className="mb-2 pl-2 text-2xl font-medium">순위</h2>
 
       {/* 순위 리스트 */}
       <ul className="flex flex-col flex-1 overflow-y-auto space-y-2">

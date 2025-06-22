@@ -1,4 +1,3 @@
-// app/game/components/Timer.tsx
 'use client'
 
 import React, { useEffect, useState } from 'react'
@@ -28,14 +27,18 @@ export default function Timer({
   const percent = Math.max(0, ((duration - secondsLeft) / duration) * 100)
 
   return (
-    <div className="flex flex-col items-center h-full">
-      <div className="w-8 flex-[9_1_0%] bg-red-400 rounded-xl overflow-hidden">
+    <div className="grid grid-rows-[8fr_1fr] h-full w-full">
+      {/* 타이머 바 (8 부분) */}
+      <div className="w-8 bg-red-400 rounded-xl overflow-hidden justify-self-center">
         <div
           className="bg-gray-200 w-full transition-all duration-300"
           style={{ height: `${percent}%` }}
         />
       </div>
-      <div className="flex-[1_1_0%] text-2xl font-medium flex items-end">{secondsLeft}</div>
+      {/* 남은 시간 텍스트 (1 부분) */}
+      <div className="text-2xl font-medium flex justify-center items-end">
+        {secondsLeft}
+      </div>
     </div>
   )
 }
