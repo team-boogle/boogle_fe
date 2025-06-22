@@ -3,9 +3,8 @@
 
 import React, { useState, useEffect } from 'react'
 import AvatarIcon from '@/app/components/AvatarIcon'
-import { AvatarIconName } from '@/app/stores/userStore' // userStore에서 AvatarIconName 타입을 가져옵니다.
+import { AvatarIconName } from '@/app/stores/userStore'
 
-// API 응답 데이터의 타입을 정의합니다.
 interface RankingApiResponse {
   name: string;
   avatarIcon: AvatarIconName;
@@ -13,7 +12,6 @@ interface RankingApiResponse {
 }
 
 // 1. 요청 실패 시 보여줄 더미 랭킹 데이터를 생성합니다.
-// (AvatarIconName에 'bear', 'cat' 등이 있다고 가정합니다.)
 const getDummyRankings = (): RankingApiResponse[] => [
   { name: 'First Place', avatarIcon: 'LuDog', avatarColor: "#C4DEF0" },
   { name: 'Runner Up', avatarIcon: 'LuCat', avatarColor: "#C4DEF0" },
@@ -35,7 +33,7 @@ export default function Ranking(): React.JSX.Element {
   useEffect(() => {
     const fetchRankings = async () => {
       try {
-        const response = await fetch('/user/rankings')
+        const response = await fetch('/api/users/rankings')
         if (!response.ok) {
           // 응답이 정상이 아니면 에러를 발생시켜 catch 블록으로 이동시킵니다.
           throw new Error(`HTTP error! status: ${response.status}`)
@@ -56,9 +54,9 @@ export default function Ranking(): React.JSX.Element {
 
   return (
     <div className="h-full flex flex-col">
-      <h2 className="mb-2 pl-2 text-2xl font-medium">순위</h2>
+      <h2 className="mb-1 pl-2 text-2xl font-medium">순위</h2>
       
-      <ul className="flex flex-col flex-1 overflow-y-auto space-y-2">
+      <ul className="flex flex-col flex-1 overflow-y-auto space-y-1">
         {isLoading ? (
           // 3. 로딩 중일 때 간단한 메시지를 표시합니다.
           <div className="flex items-center justify-center h-full text-gray-500">
@@ -69,13 +67,13 @@ export default function Ranking(): React.JSX.Element {
           rankings.map((entry, idx) => (
             <li
               key={idx}
-              className="flex items-center space-x-2 text-gray-700 px-2 py-1"
+              className="flex flex-1 items-center space-x-2 text-gray-700 px-2 py-1"
             >
               <span className="w-6 text-right font-medium">{idx + 1}.</span>
               <AvatarIcon
                 iconName={entry.avatarIcon}
                 backgroundColor= {entry.avatarColor}
-                size={36}
+                size={24}
               />
               <span className="flex-1 truncate font-medium">{entry.name}</span>
             </li>
