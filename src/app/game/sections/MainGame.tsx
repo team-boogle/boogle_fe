@@ -12,9 +12,7 @@ import { convertOne, convert } from "@/utils/hangeul"
 import CurrentPhonemes from '../components/Phonemems'
 
 export default function MainGame(): React.JSX.Element {
-  // Board 인스턴스 참조
   const boardRef = useRef<Board>(new Board(10, defaultBoardOption))
-  // 상태 관리
   const [tiles, setTiles] = useState(boardRef.current.getAll())
   const [score, setScore] = useState(boardRef.current.getScore())
   const [isTimeUp, setIsTimeUp] = useState(false)
@@ -23,7 +21,6 @@ export default function MainGame(): React.JSX.Element {
   const [timerKey, setTimerKey] = useState(0)
   const [currentPath, setCurrentPath] = useState<{ row: number; col: number; letter: string }[]>([]);
 
-  // 게임 리셋 핸들러
   const handleRetry = () => {
     boardRef.current = new Board(10, defaultBoardOption)
     setTiles(boardRef.current.getAll())
@@ -34,7 +31,6 @@ export default function MainGame(): React.JSX.Element {
     setTimerKey(prev => prev + 1)
   }
 
-  // 새로고침 핸들러
   const handleRefresh = useCallback(() => {
     boardRef.current = new Board(10, defaultBoardOption)
     setTiles(boardRef.current.getAll())
@@ -42,7 +38,6 @@ export default function MainGame(): React.JSX.Element {
     setInvalidTiles(new Set())
   }, [])
 
-  // 선택 완료 핸들러
   const handleSelectionEnd = useCallback(async (
     path: { row: number; col: number; letter: string }[]
   ) => {
@@ -62,7 +57,6 @@ export default function MainGame(): React.JSX.Element {
     }
   }, [score])
 
-  // 타이머 만료 핸들러
   const handleTimeExpire = useCallback(() => {
     setIsTimeUp(true)
   }, [])
@@ -70,32 +64,34 @@ export default function MainGame(): React.JSX.Element {
   return (
     <div className='w-full h-screen grid grid-rows-[1fr_auto]'>
       <section className="grid grid-cols-[3.5fr_3fr_3.5fr]">
-        
-        <aside className="grid grid-cols-10 pl-20 space-x-4 h-full">
-          <div className='col-span-8 grid grid-rows-[auto_1fr] pt-4 min-h-0 h-full'>
-            <h3 className="font-medium mb-2 text-2xl flex-shrink-0">찾은 단어</h3>
-            
-            <ul className="flex-1 flex flex-col">
-              {foundWords.slice(-12).map(({ word, score }, idx) => (
-                <li 
-                  key={idx} 
-                  className="flex justify-between items-center rounded text-sm mb-2 last:mb-auto"
-                >
-                  <span className="truncate text-lg font-medium">{word}</span>
-                  <span className="ml-2 flex-shrink-0 text-lg font-medium">+{score}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          
-          <div className='col-span-2 grid grid-rows-[1fr_9fr] h-full'>
-            <div className="grid place-items-center">
-              <Refresh onRefresh={handleRefresh} />
+
+        {/* 왼쪽 aside */}
+        <aside className="pl-20 flex flex-col min-h-0">
+          <div className='grid grid-cols-10 space-x-4 flex-1 min-h-0'>
+            <div className='col-span-8 flex flex-col pt-4'>
+              <h3 className="font-medium mb-2 text-2xl flex-shrink-0">찾은 단어</h3>
+              <ul className="flex-1 flex flex-col overflow-y-auto overscroll-contain">
+                {foundWords.slice(-12).map(({ word, score }, idx) => (
+                  <li
+                    key={idx}
+                    className="flex justify-between items-center rounded text-sm mb-2 last:mb-auto"
+                  >
+                    <span className="truncate text-lg font-medium">{word}</span>
+                    <span className="ml-2 flex-shrink-0 text-lg font-medium">+{score}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <Timer key={timerKey} duration={200} onExpire={handleTimeExpire} />
+            <div className='col-span-2 grid grid-rows-[1fr_9fr] h-full'>
+              <div className="grid place-items-center">
+                <Refresh onRefresh={handleRefresh} />
+              </div>
+              <Timer key={timerKey} duration={200} onExpire={handleTimeExpire} />
+            </div>
           </div>
         </aside>
 
+        {/* 중앙 section */}
         <section className="grid grid-rows-[9fr_1fr] min-h-0">
           <div className="grid place-items-center min-h-0">
             <BoardView
@@ -110,9 +106,18 @@ export default function MainGame(): React.JSX.Element {
           </div>
         </section>
 
-        <aside className="pl-8 overflow-y-auto overscroll-contain h-full">
-          <Ranking />
+        {/* --- 여기부터 수정된 부분 --- */}
+        {/* 1. flex flex-col을 grid grid-rows-[9fr_1fr]로 변경 */}
+        <aside className="pl-8 grid grid-rows-[9fr_1fr] min-h-0">
+          {/* 2. Ranking 컴포넌트를 9fr 공간에 배치하고, 스크롤 처리 */}
+          <div className="overflow-y-auto overscroll-contain min-h-0">
+             <Ranking />
+          </div>
+          {/* 3. 1fr 만큼의 빈 공간 */}
+          <div></div> 
         </aside>
+        {/* --- 여기까지 수정된 부분 --- */}
+
       </section>
 
       <footer className="grid place-items-center px-8 py-2">

@@ -86,51 +86,58 @@ export default function BoardView({
 };
 
   return (
-    <div className="relative w-full h-full grid place-items-center">
-      
+    // 이 컨테이너가 중앙 정렬을 담당합니다.
+    <div className="w-full h-full grid">
+      {/* 
+        보드와 SVG를 함께 감싸는 컨테이너입니다.
+        이 컨테이너가 정사각형 비율을 가지며, SVG와 보드는 이 컨테이너를 꽉 채웁니다.
+      */}
       <div
-        ref={boardRef}
-        className="grid gap-2 rounded-lg w-full max-w-full aspect-square"
-        style={{
-          gridTemplateColumns: `repeat(${tiles.length}, 1fr)`,
-          gridTemplateRows: `repeat(${tiles.length}, 1fr)`,
-          position: 'relative',
-          zIndex: 2,
-        }}
+        className="relative w-full max-w-full aspect-square"
         onMouseDown={() => setDragging(true)}
       >
-        {tiles.map((row, i) =>
-          row.map((cell, j) => (
-            <Tile
-              key={`${i}-${j}`}
+        <div
+          ref={boardRef}
+          className="grid gap-2 rounded-lg w-full h-full" // aspect-square를 부모로 옮기고 w-full, h-full로 채웁니다.
+          style={{
+            gridTemplateColumns: `repeat(${tiles.length}, 1fr)`,
+            gridTemplateRows: `repeat(${tiles.length}, 1fr)`,
+            position: 'relative',
+            zIndex: 2,
+          }}
+        >
+          {tiles.map((row, i) =>
+            row.map((cell, j) => (
+              <Tile
+                key={`${i}-${j}`}
                 ref={(el) => {
-                if (!tileRefs.current[i]) tileRefs.current[i] = [];
-                tileRefs.current[i][j] = el; // null 허용
-              }}
-              letter={cell}
-              selectCount={getTileSelectCount(i, j)}
-              invalid={invalidTiles.has(`${i},${j}`)}
-              onTileMouseDown={() => selectTile(i, j)}
-              onTileMouseEnter={() => dragging && selectTile(i, j)}
-            />
-          ))
-        )}
-      </div>
-      
+                  if (!tileRefs.current[i]) tileRefs.current[i] = [];
+                  tileRefs.current[i][j] = el;
+                }}
+                letter={cell}
+                selectCount={getTileSelectCount(i, j)}
+                invalid={invalidTiles.has(`${i},${j}`)}
+                onTileMouseDown={() => selectTile(i, j)}
+                onTileMouseEnter={() => dragging && selectTile(i, j)}
+              />
+            ))
+          )}
+        </div>
 
-      <svg 
-        className="absolute top-0 left-0 w-full h-full pointer-events-none"
-        style={{ zIndex: 1 }}
-      >
-        <polyline
-          points={getLinePoints()}
-          stroke="	rgba(128, 128, 128, 1)"
-          strokeWidth="2"
-          fill="none"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
+        <svg
+          className="absolute top-0 left-0 w-full h-full pointer-events-none"
+          style={{ zIndex: 1 }}
+        >
+          <polyline
+            points={getLinePoints()}
+            stroke="rgba(128, 128, 128, 1)"
+            strokeWidth="2"
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </div>
     </div>
-  )
+  );
 }
