@@ -1,11 +1,12 @@
 @import "tailwindcss";
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
+
+@font-face {
+    font-family: 'Paperlogy-8ExtraBold';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2') format('woff2');
+    font-weight: 800;
+    font-style: normal;
 }
-.no-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -23,6 +24,13 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
 body {
