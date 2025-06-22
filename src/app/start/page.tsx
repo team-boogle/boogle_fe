@@ -4,6 +4,25 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import styles from "./page.module.css"
 import { motion, useAnimate, useMotionValue, useVelocity, MotionValue } from "motion/react"
+import Link from 'next/link';
+import { useRouter } from "next/navigation" // 라우터 훅 추가
+import { useUserStore } from "../stores/userStore" // 사용자 스토어 훅 추가
+
+import { User, AvatarIconName } from "../stores/userStore"; // User와 AvatarIconName 타입을 가져옵니다.
+
+// 테스트용 더미 유저를 생성하는 함수
+const createDummyUser = (username: string): User => {
+  return {
+    // 사용자가 입력한 아이디를 사용하되, 입력값이 없으면 '개발자'로 기본 설정
+    username: username || '개발자', 
+    highScore: 7777, // 최고 점수는 임의의 값으로 설정
+    // 첨부해주신 이미지의 '고양이' 아이콘과 색상을 사용
+    avatar: 'LuCat', 
+    avatarColor: '#FFB4B4',
+  };
+};
+
+
 
 const COLLISION_RANGE = 10
 const CharWithCollison = (props: {
@@ -85,7 +104,15 @@ const CharWithCollison = (props: {
     )
 }
 
+
+
 export default function StartPage() {
+
+    const router = useRouter();
+    const { user, setUser } = useUserStore(); // 스토어에서 user 정보와 setUser 함수 가져오기
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
     const [firstLoad, setFirstLoad] = useState(true)
     const [modalOpened, setModalOpened] = useState(false)
 
@@ -95,6 +122,64 @@ export default function StartPage() {
     const mouseY = useMotionValue(0)
     const mouseVelocityX = useVelocity(mouseX)
     const mouseVelocityY = useVelocity(mouseY)
+
+
+    useEffect(() => {
+        // user 객체가 존재하면 (로그인 상태이면) /game 페이지로 이동시킵니다.
+        if (user) {
+            router.replace('/game'); // replace를 사용해 뒤로가기 시 시작 페이지로 돌아오지 않도록 함 [4]
+        }
+    }, [user, router]);
+
+
+    // StartPage 컴포넌트 내부
+
+const handleLogin = async () => {
+    // 입력값 유효성 검사 (기존과 동일)
+    if (!email || !password) {
+        alert("아이디와 비밀번호를 입력해주세요.");
+        return;
+    }
+
+    try {
+        // 1. 실제 백엔드 API에 로그인 요청을 보냅니다.
+        const response = await fetch('/api/sign_in', { // 실제 로그인 API 엔드포인트
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                username: email,
+                password: password,
+            }),
+        });
+
+        // 2. 로그인 성공 시 (Happy Path)
+        if (response.ok) {
+            const userData: User = await response.json();
+            console.log("✅ 로그인 성공! 실제 서버 데이터 사용:", userData);
+            setUser(userData); // Zustand 스토어에 실제 사용자 정보 저장
+
+        } else {
+            // 3. 서버 응답 실패 시 (예: 아이디/비번 오류, 4xx, 5xx 에러)
+            const errorData = await response.json();
+            console.warn(`⚠️ 서버 응답 실패: ${errorData.message || response.statusText}. 테스트용 더미 데이터로 로그인합니다.`);
+            
+            // 더미 데이터로 로그인 처리
+            const dummyUser = createDummyUser(email);
+            setUser(dummyUser);
+        }
+
+    } catch (error) {
+        // 4. 네트워크 에러 발생 시 (예: 서버 다운, 인터넷 끊김)
+        console.error("❌ 네트워크 오류 발생. 테스트용 더미 데이터로 로그인합니다.", error);
+        
+        // 더미 데이터로 로그인 처리
+        const dummyUser = createDummyUser(email);
+        setUser(dummyUser);
+    }
+};
+
+
+
 
     useEffect(() => {
         const handleMouseMove = (e: MouseEvent) => {
@@ -192,17 +277,27 @@ export default function StartPage() {
                     <div className="flex flex-row ">
                         <div className="flex justify-center items-center">
                             <div>
+                                {/* --- 8. 입력 필드와 로그인 버튼에 상태와 핸들러 연결 --- */}
                                 <motion.input type="text" placeholder="아이디"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                     className="py-2 px-4 bg-transparent border-1 border-black/50 placeholder-black/50 dark:border-white/50 dark:placeholder-white/50 focus:border-white w-[300px] block rounded-lg mb-3"
                                     whileFocus={{ scale: 1.1 }}></motion.input>
                                 <motion.input type="password" placeholder="비밀번호"
-                                    className="py-2 px-4 bg-transparent border-1 border-black/50 placeholder-black/50 dark:placeholder-white/50 dark:border-white/50 focus:border-white w-[300px] block rounded-lg mb-3"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    className="py-2 px-4 bg-transparent border-1 border-black/50 placeholder-black/50 dark:border-white/50 dark:placeholder-white/50 focus:border-white w-[300px] block rounded-lg mb-3"
                                     whileFocus={{ scale: 1.1 }}></motion.input>
                                 <motion.button
+                                    onClick={handleLogin}
                                     whileHover={{ scale: 1.1 }}
                                     whileTap={{ scale: 0.97 }}
                                     className="text-lg py-2 px-5 rounded-lg cursor-pointer bg-blue-500 w-[300px] mt-1 text-white">로그인</motion.button>
-                                <div className="font-extralight text-gray-400 hover:underline hover:decoration-gray-400 cursor-pointer mt-2 ml-1">회원가입하기</div>
+                                 <Link href="/signup">
+                                    <div className="font-extralight text-gray-400 hover:underline hover:decoration-gray-400 cursor-pointer mt-2 ml-1">
+                                        회원가입하기
+                                    </div>
+                                </Link>
                             </div>
                             <div className="font-light text-2xl mx-12 dark:text-white">
                             또는
