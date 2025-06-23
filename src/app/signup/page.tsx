@@ -8,14 +8,15 @@ import Header from "../components/Header";
 const APIurl = process.env.NEXT_PUBLIC_API_URL;
 
 const SignupPage = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [nickname, setNickname] = useState("");
-    const router = useRouter(); 
+	  const [email, setEmail] = useState("");
+	  const [password, setPassword] = useState("");
+	  const [confirmPassword, setConfirmPassword] = useState("");
+	  const [nickname, setNickname] = useState("");
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+	  const router = useRouter();
+
+	  const handleSubmit = async (e: React.FormEvent) => {
+		    e.preventDefault();
 
         if (password !== confirmPassword) {
             alert("비밀번호가 일치하지 않습니다.");
@@ -39,7 +40,6 @@ const SignupPage = () => {
                 return;
             }
 
-
             alert(data.message || "회원가입이 완료되었습니다.");
             router.push("/");
 
@@ -55,7 +55,7 @@ const SignupPage = () => {
             <div className="flex items-start justify-center mt-15">
                 <form onSubmit={handleSubmit} className="space-y-6">
                     {[
-                        { label: "이메일", type: "email", value: email, onChange: setEmail },
+                        { label: "아이디", type: "text", value: email, onChange: setEmail },
                         { label: "비밀번호", type: "password", value: password, onChange: setPassword },
                         { label: "비밀번호 확인", type: "password", value: confirmPassword, onChange: setConfirmPassword },
                         { label: "별명", type: "text", value: nickname, onChange: setNickname },

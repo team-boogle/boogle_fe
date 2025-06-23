@@ -7,8 +7,8 @@ import { MdOutlineTagFaces, MdOutlineFace4 } from "react-icons/md";
 import { BiFace } from "react-icons/bi";
 import { TbSunglasses } from "react-icons/tb";
 import { LuCat, LuDog } from "react-icons/lu";
-
-import Header from "../../components/Header";
+import { useUserStore, AvatarIconName } from "@/app/stores/userStore";
+import Header from "@/app/components/Header";
 
 const backgroundColors = [
   "#ECECEC", "#C4DEF0", "#CCE3AB", "#FFE5AC", "#FFB4B4", "#E2C8ED",
@@ -26,12 +26,14 @@ const APIurl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function EditProfilePage() {
   const router = useRouter();
+
   const { user, setUser } = useUserStore();
 
   // 1. 폼의 '현재 편집 중인 값'을 담을 로컬 상태를 선언합니다.
   const [nickname, setNickname] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedIcon, setSelectedIcon] = useState("");
+
   const [isLoading, setIsLoading] = useState(false);
 
   // 2. useEffect를 컴포넌트 최상단으로 이동시킵니다.
@@ -40,7 +42,7 @@ export default function EditProfilePage() {
     if (user) {
       // userStore의 필드명에 맞게 user.nickname 또는 user.username을 사용합니다.
       setNickname(user.nickname || user.username); 
-      setSelectedColor(user.avatarColor);
+      setSelectedColor(user.avatarColor || "#ECECEC");
       setSelectedIcon(user.avatar || "MdOutlineTagFaces"); // avatar가 null일 경우 기본값 설정
     }
   }, [user]); // user 객체가 로드되거나 변경될 때 이 효과가 실행됩니다.
@@ -133,8 +135,8 @@ export default function EditProfilePage() {
                   key={char.id}
                   type="button"
                   className={`w-14 h-14 rounded-full border-2 flex items-center justify-center ${selectedIcon === char.id ? "border-[#A5A5A5]" : "border-transparent"}`}
-                  onClick={() => setSelectedIcon(char.id)}
-                  disabled={isLoading}
+                  onClick={() => setSelectedIcon(char.id as AvatarIconName)}
+                  disabled={isLoading} // 로딩 중 비활성화
                 >
                   {char.icon}
                 </button>
