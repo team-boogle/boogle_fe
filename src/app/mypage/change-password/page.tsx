@@ -36,7 +36,8 @@ const MyPage = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ password: newPassword }), // 새 비밀번호만 전송
+        credentials: 'include', 
+        body: JSON.stringify({ newPassword }), 
       });
 
       if (response.ok) {
