@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import Header from "../components/Header";
 
-const baseURL = process.env.NEXT_PUBLIC_API_URL;
+const APIurl = process.env.NEXT_PUBLIC_API_URL;
 
 const SignupPage = () => {
 	const [email, setEmail] = useState("");
@@ -20,7 +20,7 @@ const SignupPage = () => {
 			return;
 		}
 
-		const res = await fetch(`${baseURL}/api/sign_up`, {
+		const res = await fetch(`${APIurl}/api/sign_up`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

@@ -21,7 +21,7 @@ const createDummyUser = (username: string): User => {
     avatarColor: '#FFB4B4',
   };
 };
-
+const APIurl = process.env.NEXT_PUBLIC_API_URL;
 
 
 const COLLISION_RANGE = 10
@@ -143,7 +143,7 @@ const handleLogin = async () => {
 
     try {
         // 1. 실제 백엔드 API에 로그인 요청을 보냅니다.
-        const response = await fetch('/api/sign_in', { // 실제 로그인 API 엔드포인트
+        const response = await fetch(`${APIurl}/api/sign_in`, { // 실제 로그인 API 엔드포인트
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

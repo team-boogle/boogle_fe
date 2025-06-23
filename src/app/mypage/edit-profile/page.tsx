@@ -21,6 +21,9 @@ const characterIcons = [
   { id: "LuDog", icon: <LuDog size="70%" color="#5B5B5B" /> },
 ];
 
+const APIurl = process.env.NEXT_PUBLIC_API_URL;
+
+
 export default function EditProfilePage() {
   const router = useRouter();
 
@@ -43,7 +46,7 @@ export default function EditProfilePage() {
     };
 
     try {
-      const response = await fetch('/api/users/profile', {
+      const response = await fetch(`${APIurl}/api/users/profile`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

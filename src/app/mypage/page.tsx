@@ -4,8 +4,9 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Header from "../game/sections/Header";
 import { useUserStore } from "../stores/userStore";
-// 1. AvatarIcon 컴포넌트를 import 합니다. (경로는 실제 파일 위치에 맞게 조정하세요)
 import AvatarIcon from "../components/AvatarIcon";
+const APIurl = process.env.NEXT_PUBLIC_API_URL;
+
 
 const MyPage = () => {
     const router = useRouter();
@@ -23,7 +24,7 @@ const MyPage = () => {
 
     const handleLogout = async () => {
         try {
-            await fetch('/api/logout', { method: 'POST' });
+            await fetch(`${APIurl}/api/logout`, { method: 'POST' });
         } catch (error) {
             console.error("로그아웃 API 호출 실패:", error);
         } finally {

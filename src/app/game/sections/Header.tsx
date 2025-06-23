@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/app/stores/userStore';
 import AvatarIcon from '@/app/components/AvatarIcon';
 import { AvatarIconName } from '@/app/stores/userStore';
+const APIurl = process.env.NEXT_PUBLIC_API_URL;
 
 interface HeaderProps {
   title: string;

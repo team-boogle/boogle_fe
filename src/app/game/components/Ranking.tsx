@@ -5,6 +5,9 @@ import React, { useState, useEffect } from 'react'
 import AvatarIcon from '@/app/components/AvatarIcon'
 import { AvatarIconName } from '@/app/stores/userStore'
 
+const APIurl = process.env.NEXT_PUBLIC_API_URL;
+
+
 interface RankingApiResponse {
   name: string;
   avatarIcon: AvatarIconName;
@@ -33,7 +36,7 @@ export default function Ranking(): React.JSX.Element {
   useEffect(() => {
     const fetchRankings = async () => {
       try {
-        const response = await fetch('/api/users/rankings')
+        const response = await fetch(`${APIurl}/api/users/rankings`)
         if (!response.ok) {
           // 응답이 정상이 아니면 에러를 발생시켜 catch 블록으로 이동시킵니다.
           throw new Error(`HTTP error! status: ${response.status}`)
