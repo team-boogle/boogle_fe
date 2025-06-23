@@ -1,16 +1,19 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import Header from "../components/Header";
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 const SignupPage = () => {
-	const [email, setEmail] = useState("");
+	const [userid, setUserid] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const [nickname, setNickname] = useState("");
+
+	const router = useRouter();
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -25,16 +28,17 @@ const SignupPage = () => {
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ email: email, password: password, nickName: nickname }),
+			body: JSON.stringify({ email: userid, password: password, nickName: nickname }),
 		});
 
+		const data = await res.json() || "회원가입 중 오류가 발생했습니다.";
+		alert(data.message);
+
 		if (!res.ok) {
-			console.error(res);
 			return;
 		}
 
-		const data = await res.json();
-		alert(data.message);
+		router.push("/");
 
 	};
 
@@ -45,10 +49,10 @@ const SignupPage = () => {
 				<form onSubmit={handleSubmit} className="space-y-6">
 					{[
 						{
-							label: "이메일",
-							type: "email",
-							value: email,
-							onChange: setEmail,
+							label: "아이디",
+							type: "text",
+							value: userid,
+							onChange: setUserid,
 						},
 						{
 							label: "비밀번호",
