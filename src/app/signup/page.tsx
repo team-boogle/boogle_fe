@@ -28,7 +28,12 @@ const SignupPage = () => {
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ email: userid, password: password, nickName: nickname }),
+			body: JSON.stringify({
+				email: userid,
+				password: password,
+				nickName: nickname,
+			}),
+			credentials: "include",
 		});
 
 		const data = await res.json() || "회원가입 중 오류가 발생했습니다.";
