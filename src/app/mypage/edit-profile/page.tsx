@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useUserStore } from "../../stores/userStore";
 import { MdOutlineTagFaces, MdOutlineFace4 } from "react-icons/md";
 import { BiFace } from "react-icons/bi";
 import { TbSunglasses } from "react-icons/tb";
@@ -76,7 +75,7 @@ export default function EditProfilePage() {
           nickname: nickname,
           username: user!.username, // username은 변경되지 않는다고 가정
           avatarColor: selectedColor,
-          avatar: selectedIcon as any,
+          avatar: selectedIcon as AvatarIconName,
         };
         setUser(updatedUser);
 

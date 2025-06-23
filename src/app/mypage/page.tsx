@@ -60,7 +60,7 @@ const MyPage = () => {
                     </div>
                     <div className="flex justify-center gap-8">
                         <span className="w-20 text-right text-[#A5A5A5]">별명</span>
-                        <span className="w-55">{user.username}</span>
+                        <span className="w-55">{user.nickname}</span>
                     </div>
                     <div className="flex justify-center gap-8">
                         <span className="w-20 text-right text-[#A5A5A5]">최고기록</span>
