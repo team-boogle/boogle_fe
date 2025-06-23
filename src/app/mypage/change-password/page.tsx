@@ -4,6 +4,9 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Header from "../../components/Header";
 
+const APIurl = process.env.NEXT_PUBLIC_API_URL;
+
+
 const MyPage = () => { 
   const router = useRouter();
 
@@ -28,7 +31,7 @@ const MyPage = () => {
     setIsLoading(true); // 로딩 상태 시작
 
     try {
-      const response = await fetch('/api/users/password', {
+      const response = await fetch(`${APIurl}/api/users/password`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

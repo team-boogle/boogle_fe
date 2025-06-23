@@ -12,11 +12,14 @@ import GameArea from './sections/GameArea';
 import GameFooter from './sections/GameFooter';
 import TimeUpModal from './components/TimeUpModal';
 
+const APIurl = process.env.NEXT_PUBLIC_API_URL;
+
 export default function GamePage(): React.JSX.Element {
-  const { user } = useUserStore();
+  // 스토어 및 라우터는 그대로 사용
+  const { user, setUser } = useUserStore();
   const router = useRouter();
 
-  // --- MainGame.tsx에서 옮겨온 모든 상태와 로직 ---
+  // 게임 관련 상태 및 로직은 그대로 사용
   const boardRef = useRef<Board>(new Board(10, defaultBoardOption));
   const [tiles, setTiles] = useState(boardRef.current.getAll());
   const [score, setScore] = useState(boardRef.current.getScore());
@@ -26,6 +29,44 @@ export default function GamePage(): React.JSX.Element {
   const [timerKey, setTimerKey] = useState(0);
   const [currentPath, setCurrentPath] = useState<{ row: number; col: number; letter: string }[]>([]);
 
+  // 1. 최고 점수 갱신을 위한 useEffect 추가
+  useEffect(() => {
+    // 게임이 종료되었고, 로그인한 유저 정보가 있으며, 현재 점수가 최고 점수보다 높을 때만 실행
+    if (isTimeUp && user && score > user.highScore) {
+      
+      const updateHighScore = async () => {
+        console.log(`New high score! Updating from ${user.highScore} to ${score}`);
+
+        // 2. 클라이언트 상태 우선 업데이트 (Optimistic Update)
+        const updatedUser = { ...user, highScore: score };
+        setUser(updatedUser);
+
+        try {
+          // 3. 서버에 최고 점수 저장
+          const response = await fetch(`${APIurl}/api/users/highscore`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              // 예시: 'Authorization': `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({ highScore: score }),
+          });
+
+          if (!response.ok) {
+            console.error('Failed to update high score on the server.');
+            // 실패 시, 원래 점수로 롤백할 수도 있습니다.
+            // setUser(user); 
+          }
+        } catch (error) {
+          console.error('An error occurred while updating high score:', error);
+        }
+      };
+
+      updateHighScore();
+    }
+  }, [isTimeUp, score, user, setUser]); // 의존성 배열에 필요한 모든 값을 추가합니다.
+
+  // --- 나머지 함수들은 그대로 유지 ---
   const handleRetry = () => {
     boardRef.current = new Board(10, defaultBoardOption);
     setTiles(boardRef.current.getAll());
@@ -73,19 +114,16 @@ export default function GamePage(): React.JSX.Element {
   if (!user) {
     return <div>로딩 중...</div>;
   }
-
+  
+  // --- JSX 렌더링 부분은 그대로 유지 ---
   return (
-    // --- 최종 레이아웃 구성 ---
-    // h-screen과 grid-rows를 사용하여 1:8:1 비율로 나눕니다.
-    <main className="grid grid-rows-[1fr_8fr_1fr] h-screen">
+    <main className="grid grid-rows-[1fr_7fr_1fr] h-screen">
       <Header
         title="부글"
-        userName={user.username}
+        nickname={user.nickname}
         avatar={user.avatar}
         avatarColor={user.avatarColor}
       />
-      
-      {/* 분리된 컴포넌트에 상태와 핸들러를 props로 전달합니다. */}
       <GameArea
         tiles={tiles}
         invalidTiles={invalidTiles}
@@ -97,10 +135,7 @@ export default function GamePage(): React.JSX.Element {
         onRefresh={handleRefresh}
         onTimeExpire={handleTimeExpire}
       />
-      
       <GameFooter score={score} />
-
-      {/* TimeUpModal은 레이아웃에 영향을 주지 않으므로 여기에 둡니다. */}
       <TimeUpModal open={isTimeUp} score={score} onRetry={handleRetry} />
     </main>
   );

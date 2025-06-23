@@ -51,7 +51,7 @@ export default function GameArea({
             <div className="grid place-items-center">
               <Refresh onRefresh={onRefresh} />
             </div>
-            <Timer key={timerKey} duration={200} onExpire={onTimeExpire} />
+            <Timer key={timerKey} duration={100} onExpire={onTimeExpire} />
           </div>
         </div>
       </aside>
