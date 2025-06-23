@@ -4,8 +4,9 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Header from "../game/sections/Header";
 import { useUserStore } from "../stores/userStore";
-// 1. AvatarIcon 컴포넌트를 import 합니다. (경로는 실제 파일 위치에 맞게 조정하세요)
 import AvatarIcon from "../components/AvatarIcon";
+const APIurl = process.env.NEXT_PUBLIC_API_URL;
+
 
 const MyPage = () => {
     const router = useRouter();
@@ -23,7 +24,7 @@ const MyPage = () => {
 
     const handleLogout = async () => {
         try {
-            await fetch('/api/logout', { method: 'POST' });
+            await fetch(`${APIurl}/api/logout`, { method: 'POST' });
         } catch (error) {
             console.error("로그아웃 API 호출 실패:", error);
         } finally {
@@ -39,7 +40,7 @@ const MyPage = () => {
         <div className="min-h-screen flex flex-col items-center">
             <Header 
                 title="마이페이지" 
-                userName={user.username} 
+                nickname={user.nickname} 
                 avatar={user.avatar} 
                 avatarColor={user.avatarColor} 
             />
@@ -59,7 +60,7 @@ const MyPage = () => {
                     </div>
                     <div className="flex justify-center gap-8">
                         <span className="w-20 text-right text-[#A5A5A5]">별명</span>
-                        <span className="w-55">{user.username}</span>
+                        <span className="w-55">{user.nickname}</span>
                     </div>
                     <div className="flex justify-center gap-8">
                         <span className="w-20 text-right text-[#A5A5A5]">최고기록</span>

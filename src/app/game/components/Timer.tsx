@@ -36,7 +36,7 @@ export default function Timer({
         />
       </div>
       {/* 남은 시간 텍스트 (1 부분) */}
-      <div className="text-2xl font-medium flex justify-center items-end">
+      <div className="text-2xl font-medium flex justify-center items-center">
         {secondsLeft}
       </div>
     </div>

@@ -21,7 +21,7 @@ const createDummyUser = (username: string): User => {
     avatarColor: '#FFB4B4',
   };
 };
-
+const APIurl = process.env.NEXT_PUBLIC_API_URL;
 
 
 const COLLISION_RANGE = 10
@@ -142,39 +142,44 @@ const handleLogin = async () => {
     }
 
     try {
-        // 1. 실제 백엔드 API에 로그인 요청을 보냅니다.
-        const response = await fetch('/api/sign_in', { // 실제 로그인 API 엔드포인트
+        console.log("📧 email:", email, "🔑 password:", password);
+        const response = await fetch(`${APIurl}/api/sign_in`, { 
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 username: email,
                 password: password,
             }),
+            credentials: "include"
         });
 
-        // 2. 로그인 성공 시 (Happy Path)
         if (response.ok) {
-            const userData: User = await response.json();
-            console.log("✅ 로그인 성공! 실제 서버 데이터 사용:", userData);
-            setUser(userData); // Zustand 스토어에 실제 사용자 정보 저장
+            const apiResponse = await response.json();
+            console.log("✅ 로그인 성공! 서버 원본 데이터:", apiResponse);
 
+            const mappedUser: User = {
+                username: apiResponse.username,
+                nickname: apiResponse.nickname,
+                highScore: apiResponse.highScore,
+                avatarColor: apiResponse.bg_color || '#ECECEC', 
+                avatar: apiResponse.profile_image as AvatarIconName | null,
+            };
+            setUser(mappedUser);
+            router.push('/game');
         } else {
-            // 3. 서버 응답 실패 시 (예: 아이디/비번 오류, 4xx, 5xx 에러)
             const errorData = await response.json();
-            console.warn(`⚠️ 서버 응답 실패: ${errorData.message || response.statusText}. 테스트용 더미 데이터로 로그인합니다.`);
+            console.warn(`⚠️ 서버 응답 실패: ${errorData.message || response.statusText}.`);
             
-            // 더미 데이터로 로그인 처리
-            const dummyUser = createDummyUser(email);
-            setUser(dummyUser);
+            alert('로그인 실패')
         }
 
     } catch (error) {
-        // 4. 네트워크 에러 발생 시 (예: 서버 다운, 인터넷 끊김)
-        console.error("❌ 네트워크 오류 발생. 테스트용 더미 데이터로 로그인합니다.", error);
-        
-        // 더미 데이터로 로그인 처리
-        const dummyUser = createDummyUser(email);
-        setUser(dummyUser);
+        console.error("❌ 네트워크 오류 발생.", error);
+        alert('로그인 실패')
+        // // 더미 데이터로 로그인 처리
+        // const dummyUser = createDummyUser(email);
+        // setUser(dummyUser);
+        router.push('/')
     }
 };
 

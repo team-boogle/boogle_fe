@@ -12,6 +12,7 @@ export type AvatarIconName =
 
 export interface User {
   username: string;
+  nickname: string;
   highScore: number;
   avatarColor: string;
   avatar: AvatarIconName | null; 
