@@ -40,7 +40,7 @@ const MyPage = () => {
         <div className="min-h-screen flex flex-col items-center">
             <Header 
                 title="마이페이지" 
-                userName={user.username} 
+                nickname={user.nickname} 
                 avatar={user.avatar} 
                 avatarColor={user.avatarColor} 
             />

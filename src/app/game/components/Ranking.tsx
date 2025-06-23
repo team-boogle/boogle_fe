@@ -70,7 +70,7 @@ export default function Ranking(): React.JSX.Element {
           rankings.map((entry, idx) => (
             <li
               key={idx}
-              className="flex flex-1 items-center space-x-2 text-gray-700 px-2 py-1"
+              className="flex flex-1 items-center space-x-2 text-gray-700 py-1"
             >
               <span className="w-6 text-right font-medium">{idx + 1}.</span>
               <AvatarIcon
