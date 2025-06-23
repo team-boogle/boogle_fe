@@ -6,8 +6,8 @@ import { MdOutlineTagFaces, MdOutlineFace4 } from "react-icons/md";
 import { BiFace } from "react-icons/bi";
 import { TbSunglasses } from "react-icons/tb";
 import { LuCat, LuDog } from "react-icons/lu";
-
-import Header from "../../components/Header";
+import { useUserStore, AvatarIconName } from "@/app/stores/userStore";
+import Header from "@/app/components/Header";
 
 const backgroundColors = [
   "#ECECEC", "#C4DEF0", "#CCE3AB", "#FFE5AC", "#FFB4B4", "#E2C8ED",
@@ -23,10 +23,11 @@ const characterIcons = [
 
 export default function EditProfilePage() {
   const router = useRouter();
+  const { user } = useUserStore();
 
-  const [nickname, setNickname] = useState("별명");
-  const [selectedColor, setSelectedColor] = useState("#ECECEC");
-  const [selectedIcon, setSelectedIcon] = useState("MdOutlineTagFaces");
+  const [nickname, setNickname] = useState(user? user.username : "별명");
+  const [selectedColor, setSelectedColor] = useState(user? user.avatarColor : "#ECECEC");
+  const [selectedIcon, setSelectedIcon] = useState(user? user.avatar : "MdOutlineTagFaces");
   
   // 1. 로딩 상태를 관리할 state 추가
   const [isLoading, setIsLoading] = useState(false);
@@ -105,7 +106,7 @@ export default function EditProfilePage() {
                   key={char.id}
                   type="button"
                   className={`w-14 h-14 rounded-full border-2 flex items-center justify-center ${selectedIcon === char.id ? "border-[#A5A5A5]" : "border-transparent"}`}
-                  onClick={() => setSelectedIcon(char.id)}
+                  onClick={() => setSelectedIcon(char.id as AvatarIconName)}
                   disabled={isLoading} // 로딩 중 비활성화
                 >
                   {char.icon}
